@@ -1,0 +1,83 @@
+//sass --watch index.scss:index.css
+$white: #fff;
+$grey: #eaeaea;
+$green: #A9DCB5;
+$blue: #17a2b8;
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.item-wrap {
+    border: 1px solid $grey;
+    padding: 20px;
+    text-align: center;
+    margin: 10px 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    ul {
+        margin-bottom: 20px;
+    }
+}
+.button-wrap {
+    display: flex;
+    margin-top: auto;
+    justify-content: space-around;
+}
+.active span {
+    margin: 5px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: $green;
+    display: block;
+}
+.items-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    > div {
+        width: 100%;
+    }
+}
+
+.name {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+.hours {
+    background-color: $blue;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 0.7rem;
+    padding: 4px 6px;
+    margin: 0 5px;
+}
+
+//forms
+.form-wrap {
+    padding: 40px
+}
+
+.form {
+    max-width: 600px;
+}
+
+@media only screen and (min-width: 768px) {
+    .items-list>div  {
+        width: calc(50% - 20px);
+        margin: 10px;
+    }
+}
+@media only screen and (min-width: 992px) {
+    .items-list>div {
+        width: calc(33.33% - 20px);
+    }
+}
