@@ -1,8 +1,4 @@
 // declaring variables
-
-let studentsData = [];
-let coursesData = [];
-
 let studentsBlock = document.getElementById('students-block');
 let coursesBlock = document.getElementById('courses-block');
 
@@ -49,8 +45,8 @@ class Enrollment {
         const name = document.getElementById('name').value;
         const last_name = document.getElementById('lastName').value;
 
-        studentsData.push({
-            id: studentsData.length,
+        this.students.push({
+            id:  this.students.length,
             name: name,
             last_name: last_name,
             status: true,
@@ -88,15 +84,13 @@ class Enrollment {
 
         //check students status
 
-        if (status === true) {
+        if (status) {
             student.courses.push(course);
             course.students.push(student);
 
         } else {
             alert('Student is not active');
         }
-
-
 
     }
 
@@ -108,11 +102,6 @@ class Enrollment {
         student.last_name = inputLastName;
 
     }
-    // showEditStudent(studentId) {
-    //     let student = this.students.filter(student => student.id === studentId)[0]
-    //   let editStudent = document.querySelector(".edit-student-form") ; 
-    //   editStudent.style.display = "block";
-    // }
 
 }
 
@@ -187,18 +176,20 @@ const refreshStudents = () => {
         card.innerHTML = `
 
             <article class="item-wrap">
-            <div class="name h5">${student.name} ${student.last_name}<span></span></div>
+            <form>
+            <h5 class="name h5">${student.name} ${student.last_name}<span></span></h5>
             <div class="courses-list mb-3">
             </div>
             <div class="button-wrap mb-3">
                  <button class="btn btn-outline-info add-course" type="button" data-student="${student.id}">Add course</button>
-                <!-- <button class="btn btn-outline-info show-edit-student" type="button" data-student="${student.id}">Edit info</button> -->
-                <button class="btn btn-outline-info edit-student" type="button" data-student="${student.id}">Submit info</button>
+                <button class="btn btn-outline-info show-edit-student" type="button" data-student="${student.id}">Edit info</button>
+                <button class="btn btn-outline-info edit-student" type="button" data-student="${student.id}" style="display:none">Submit info</button>
             </div>
             <div class="edit-student-form">
                 <input type="text" class="form-control mb-3" value placeholder="name">
                 <input type="text" class="form-control mb-3" value placeholder="last-name">
             </div>
+            </form>
         </article>
         `;
 
@@ -219,7 +210,7 @@ const refreshStudents = () => {
 
         studentBody.innerHTML += coursesResult;
 
-        card.children[0].children[1].appendChild(studentBody);
+        card.children[0].children[0].children[1].appendChild(studentBody);
 
         // courses select list
         const populateCoursesList = () => {
@@ -242,31 +233,42 @@ const refreshStudents = () => {
     // add selected course button - event
     const addCourseBtn = document.querySelectorAll('.add-course');
     addCourseBtn.forEach(el => el.addEventListener('click', event => {
-        let courseId = el.parentElement.parentElement.getElementsByTagName('select')[0].value;
+        let courseId = el.parentElement.parentElement.parentElement.getElementsByTagName('select')[0].value;
         let studentId = el.attributes["data-student"].value;
-
+       
         addCourseToStudent(parseInt(courseId), parseInt(studentId));
     }));
 
-    //show edit student
-    //       let showEditStudentBtn = document.querySelectorAll('.show-edit-student')
-    //       showEditStudentBtn.forEach (el => el.addEventListener('click', event =>{
-    //         //let studentId = el.attributes["studentId"].value;
-    //         //showEditStudent(parseInt(studentId));
-    //         let editStudent = document.querySelector(".edit-student-form") ; 
-    //   editStudent.style.display = "block";
-
-    //     }));
+    
 
     //edit student
-    let editStudentBtn = document.querySelectorAll('.edit-student');
 
-    editStudentBtn.forEach(el => el.addEventListener('click', event => {
-        let studentId = el.attributes["data-student"].value;
-        let inputName = el.parentElement.parentElement.children[3].children[0].value;
-        let inputLastName = el.parentElement.parentElement.children[3].children[1].value;
+    let studentWrap = document.querySelectorAll('.item-wrap')
+   
+    studentWrap.forEach(el => el.addEventListener('click', event => {
+        let elClicked = event.target;
+        if ( elClicked.tagName === "BUTTON") {
+             if (elClicked.textContent === "Edit info") {
+                elClicked.style.display = "none";
+                let editStudent = elClicked.parentElement.parentElement.getElementsByClassName('edit-student-form')[0];
+                editStudent.style.display = "block";
 
-        editStudent(parseInt(studentId), inputName, inputLastName);
+                let submitStudentBtn = elClicked.parentElement.getElementsByClassName('edit-student')[0];
+                submitStudentBtn.style.display = "block";
+             }
+             else if ( elClicked.textContent === "Submit info") {
+                elClicked.style.display = "none";
+                
+                let studentId =  elClicked.attributes["data-student"].value;
+                let inputName =  elClicked.parentElement.parentElement.children[3].children[0].value;
+                let inputLastName =  elClicked.parentElement.parentElement.children[3].children[1].value;
+
+                let editStudentBtn = elClicked.parentElement.getElementsByClassName('show-edit-student')[0];
+                editStudentBtn.style.display = "block";
+        
+                editStudent(parseInt(studentId), inputName, inputLastName);
+            } 
+        }
 
     }));
 
